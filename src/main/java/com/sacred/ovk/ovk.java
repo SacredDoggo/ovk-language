@@ -43,8 +43,8 @@ public class ovk {
     }
 
     private static void run(String source){
-        Scanner scanner = new Scanner(source);
-        List<Token> tokens = scanner.scanTokens();
+        LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(source);
+        List<Token> tokens = lexicalAnalyzer.scanTokens();
 
         // Printing the Tokens
         for(Token token : tokens){
