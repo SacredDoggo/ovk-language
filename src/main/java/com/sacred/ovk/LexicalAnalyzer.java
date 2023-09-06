@@ -80,6 +80,8 @@ public class LexicalAnalyzer {
             case '/':
                 if(match('/')) {
                     while(peek() != '\n' && !isAtEnd()) advance();
+                } else if(match('*')) {
+                    multiLineComment();
                 } else {
                     addToken(SLASH);
                 }
@@ -107,6 +109,20 @@ public class LexicalAnalyzer {
                 }
                 break;
         }
+    }
+
+    private void multiLineComment() {
+        while(peek() != '*' && peekNext() != '/') {
+            if(isAtEnd()) {
+                ovk.error(line, "Unexpected termination of multi-line comment");
+                return;
+            }
+            else {
+                advance();
+            }
+        }
+        advance();
+        advance();
     }
 
     private void identifier() {
@@ -197,5 +213,5 @@ public class LexicalAnalyzer {
         String text = source.substring(start, current);
         tokens.add(new Token(type, text, literal, line));
     }
-};
+}
 
