@@ -112,14 +112,8 @@ public class LexicalAnalyzer {
     }
 
     private void multiLineComment() {
-        while(peek() != '*' && peekNext() != '/') {
-            if(isAtEnd()) {
-                ovk.error(line, "Unexpected termination of multi-line comment");
-                return;
-            }
-            else {
-                advance();
-            }
+        while(!isAtEnd() && (peek() != '*' || peekNext() != '/')) {
+            advance();
         }
         advance();
         advance();
