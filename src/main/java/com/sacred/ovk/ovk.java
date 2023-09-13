@@ -45,11 +45,20 @@ public class ovk {
     private static void run(String source){
         LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer(source);
         List<Token> tokens = lexicalAnalyzer.scanTokens();
+        Parser parser = new Parser(tokens);
+        Expr expression = parser.parse();
+
+        // Stop id there was a syntax error.
+        if (hadError) return;
+
+        System.out.println(new AstPrinter().print(expression));
 
         // Printing the Tokens
+        /*
         for(Token token : tokens){
             System.out.println(token);
         }
+        */
     }
 
     static void error(int line, String message){
@@ -59,5 +68,13 @@ public class ovk {
     private static void report(int line, String where, String message){
         System.err.println("[line " + line + "] Error" + where + ": " + message);
         hadError = true;
+    }
+
+    static void error(Token token, String message) {
+        if(token.type == TokenType.EOF) {
+            report(token.line, " at end", message);
+        } else {
+            report(token.line, " at", message);
+        }
     }
 }
